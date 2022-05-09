@@ -1,7 +1,6 @@
 from ..model.comments_info import Comments
 from ..validation.schemas.comments_schema import CommentsSchema,comment_schema
 from flask import jsonify,request
-from ..config import DB_URL
 
 def get_data():
     dets = Comments.allQuery()
