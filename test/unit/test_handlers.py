@@ -4,8 +4,8 @@ from unittest.mock import patch
 from flask import Response, render_template, request
 from users import handlers
 from users.logic import data_comments
-from users.connectors import mysql
-from users.connectors.mysql import Comments
+from users.model import comments_info
+from users.model.comments_info import Comments
 import pytest
 from flask_testing import TestCase
 from mock import Mock, sentinel
@@ -13,7 +13,7 @@ from requests import codes, delete
 from os import *
 
 
-__test_obj=handlers.Comments(id,name,comment="hii")
+value_test= handlers.Comments(id,name,comment="")
 
 @pytest.mark.run()
 def test_index(mocker,fixture_client):
@@ -23,7 +23,6 @@ def test_index(mocker,fixture_client):
 
     assert resp.status_code == 200
     result = json.loads(resp.data.decode())
-    assert result 
     
 
 @pytest.mark.run()
@@ -75,9 +74,8 @@ def test_update(mocker,fixture_client,input,output,status_code,id):
     assert update_mock.called_once_with(id)
 
 @pytest.mark.run()
-def test_delete_comment(mocker,fixture_client):
-    fixture_client.delete('/delete/<id>')
+def test_delete(mocker):
     delete_mock = mocker.patch.object(data_comments,'delete_data')
-    delete_mock.return_value= Response({'id': ''})
-    resp = fixture_client.patch('/delete/<id>')
-    assert resp.status_code 
+    delete_mock.return_value = Response({'from': 'delete_data'})
+    resp = data_comments.delete_data(id)
+    assert resp.status_code == 200
